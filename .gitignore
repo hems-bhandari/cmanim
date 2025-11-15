@@ -1,0 +1,28 @@
+# Build artifacts
+build/
+bin/
+*.o
+*.a
+*.so
+*.dylib
+*.dll
+
+# Generated files
+*.mp4
+*.png
+*.jpg
+
+# OS files
+.DS_Store
+*.swp
+*.swo
+*~
+
+# IDE files
+.vscode/
+.idea/
+*.code-workspace
+
+# Temporary files
+/tmp/
+glad_temp/

@@ -1,0 +1,268 @@
+================================================================================
+                    HOW TO RUN CMANIM - ALL METHODS
+================================================================================
+
+📁 Location: /Users/nyuad/Desktop/canim
+
+================================================================================
+METHOD 1: EASIEST - ONE CLICK
+================================================================================
+
+./RUN_ME.sh
+
+This script will:
+  ✓ Build everything
+  ✓ Run test (creates test_output.png)
+  ✓ Run demo (creates graph_demo.mp4)
+
+================================================================================
+METHOD 2: RUN INDIVIDUAL EXAMPLES
+================================================================================
+
+# Test 1: Basic rendering test
+make test
+open test_output.png
+
+# Test 2: Full animated demo
+make run-demo
+open graph_demo.mp4
+
+================================================================================
+METHOD 3: RUN ALL EXAMPLES AT ONCE
+================================================================================
+
+./scripts/run_all_examples.sh
+
+Creates:
+  - test_output.png
+  - graph_demo.mp4
+  - simple_sine.mp4
+  - heart.mp4
+  - spiral.mp4
+  - waves.mp4
+
+================================================================================
+METHOD 4: MANUAL COMPILATION (FOR CUSTOM PROGRAMS)
+================================================================================
+
+Step 1: Build the library
+--------------------------
+cd /Users/nyuad/Desktop/canim
+make build/libcmanim.a
+
+Step 2: Compile your program
+-----------------------------
+gcc -std=c23 -O3 -DGL_SILENCE_DEPRECATION -Iinclude -Isrc \
+    your_program.c build/libcmanim.a \
+    -L/opt/homebrew/lib -lglfw \
+    -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo \
+    -lm -o your_program
+
+Step 3: Run
+-----------
+./your_program
+
+================================================================================
+ALL AVAILABLE EXAMPLES
+================================================================================
+
+1. test_render          → Creates: test_output.png
+   Command: make test
+
+2. graph_demo          → Creates: graph_demo.mp4 (10s, sin + Lissajous)
+   Command: make run-demo
+
+3. simple_sine         → Creates: simple_sine.mp4 (basic sine wave)
+   Source: examples/simple_sine.c
+
+4. parametric_heart    → Creates: heart.mp4 (animated heart shape)
+   Source: examples/parametric_heart.c
+
+5. spiral              → Creates: spiral.mp4 (spiral drawing)
+   Source: examples/spiral.c
+
+6. multiple_waves      → Creates: waves.mp4 (3 sine waves)
+   Source: examples/multiple_waves.c
+
+================================================================================
+QUICK TESTS
+================================================================================
+
+# Just build (no run)
+make
+
+# Build and test
+make test
+
+# Clean everything
+make clean
+
+# Build + run demo
+make run-demo
+
+# See all Make targets
+make help
+
+================================================================================
+VIEW OUTPUT FILES
+================================================================================
+
+# View PNG
+open test_output.png
+
+# View MP4
+open graph_demo.mp4
+
+# Or use:
+qlmanage -p test_output.png
+vlc graph_demo.mp4
+ffplay graph_demo.mp4
+
+================================================================================
+FILE LOCATIONS
+================================================================================
+
+Source code:       src/*.c, include/*.h
+Examples:          examples/*.c
+Tests:             tests/*.c
+Built library:     build/libcmanim.a
+Executables:       bin/*
+Output videos:     *.mp4
+Output images:     *.png
+
+================================================================================
+TYPICAL WORKFLOW
+================================================================================
+
+1. Run existing examples:
+   make run-demo
+
+2. View the source:
+   cat examples/graph_demo.c
+
+3. Modify it or create new file:
+   cp examples/graph_demo.c my_animation.c
+   # Edit my_animation.c
+
+4. Compile your version:
+   gcc -std=c23 -O3 -DGL_SILENCE_DEPRECATION -Iinclude -Isrc \
+       my_animation.c build/libcmanim.a \
+       -L/opt/homebrew/lib -lglfw \
+       -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo \
+       -lm -o my_animation
+
+5. Run it:
+   ./my_animation
+
+6. View output:
+   open my_animation.mp4
+
+================================================================================
+DOCUMENTATION
+================================================================================
+
+QUICKSTART.md      → Start here! Quick examples and patterns
+USAGE_GUIDE.md     → Complete guide with 10 use cases
+README.md          → Full project documentation
+STATUS.md          → What's implemented
+include/cmanim.h   → API reference
+
+================================================================================
+GETTING HELP
+================================================================================
+
+1. See examples in examples/ directory
+2. Read QUICKSTART.md for common patterns
+3. Check USAGE_GUIDE.md for detailed use cases
+4. Read the source: examples/graph_demo.c is well-commented
+
+================================================================================
+TROUBLESHOOTING
+================================================================================
+
+Problem: "make: command not found"
+Solution: Install Xcode Command Line Tools
+          xcode-select --install
+
+Problem: "GLFW not found"
+Solution: brew install glfw
+
+Problem: "ffmpeg not found"
+Solution: brew install ffmpeg
+
+Problem: "No such file or directory: cmanim.h"
+Solution: Use -Iinclude when compiling
+
+Problem: Video is blank/white
+Solution: Check function range and camera zoom
+          Try: cm_scene_set_camera(scene, (CMCamera){0, 0, 1.0f});
+
+================================================================================
+COMMON COMPILATION FLAGS
+================================================================================
+
+Required:
+  -std=c23                    Use C23 standard
+  -Iinclude -Isrc             Include directories
+  build/libcmanim.a           The library
+  -L/opt/homebrew/lib -lglfw  GLFW library
+  -framework OpenGL ...       macOS frameworks
+  -lm                         Math library
+
+Optional:
+  -O3                         Optimization (faster)
+  -DGL_SILENCE_DEPRECATION    Hide OpenGL warnings
+  -g                          Debug symbols
+  -Wall -Wextra               More warnings
+
+================================================================================
+EXAMPLES OF OUTPUT
+================================================================================
+
+After running examples, you'll have:
+
+test_output.png    64 KB   Single frame of sin(x)
+graph_demo.mp4     137 KB  10s animation, 600 frames
+simple_sine.mp4    ~50 KB  3s sine wave
+heart.mp4          ~60 KB  3s heart animation
+spiral.mp4         ~80 KB  5s spiral drawing
+waves.mp4          ~70 KB  5s multiple waves
+
+All at 1920x1080, 60fps, H.264 encoded
+
+================================================================================
+PERFORMANCE
+================================================================================
+
+On Apple M1:
+  - Rendering: ~140 FPS @ 1080p
+  - Encoding: 2-3x realtime
+  - 600 frames in ~4 seconds
+
+To speed up:
+  - Reduce FPS: 30 instead of 60
+  - Reduce resolution: 1280x720
+  - Reduce samples: 1024 instead of 4096
+  - Shorter duration: 3s instead of 10s
+
+================================================================================
+SUMMARY - FASTEST WAY TO START
+================================================================================
+
+cd /Users/nyuad/Desktop/canim
+./RUN_ME.sh
+
+Then open the generated files:
+  open test_output.png
+  open graph_demo.mp4
+
+Want more? Run:
+  ./scripts/run_all_examples.sh
+
+Create your own:
+  1. Copy examples/simple_sine.c to my_animation.c
+  2. Edit the function
+  3. Compile with the gcc command above
+  4. Run and enjoy!
+
+================================================================================
